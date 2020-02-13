@@ -7,31 +7,27 @@ import { FaTimesCircle } from 'react-icons/fa';
 
 class Note extends Component {
     state = {
-        editing: false
+        editing: false,
     }
 
     componentWillMount() {
         this.style = {
-            right: this.randomBetween(0, window.innerWidth - 150, 'px'),
-            top: this.randomBetween(0, window.innerHeight - 150, 'px'),
-            transform: `rotate(${this.randomBetween(-25, 25, 'deg')})`,
+            right: `${this.randomBetween(window.innerWidth - 150)}px`,
+            top: `${this.randomBetween(window.innerHeight - 150)}px`,
             backgroundColor: this.randomColor()
-
         }
     }
 
-    randomBetween = (x,y,s) => {
-        return x + Math.ceil(Math.random() * (y-x)) + s
+    randomBetween = (y) => {
+        return Math.ceil(Math.random() * y)
     }
 
     randomColor = () => {
-        return '#'+Math.random().toString(16).substr(-6);
+        return `#${Math.random().toString(16).substr(-6)}`;
     }
 
     edit = () => {
-        this.setState({
-            editing: true
-        })
+        this.setState({editing: true})
     }
 
     remove = (e) => {
@@ -54,15 +50,14 @@ class Note extends Component {
     }
 
     
-
     renderForm() {
+        const {note} = this.props
         return(
             <div className="note"  style={this.style}>
                 <form onSubmit={this.save}>
-                    <textarea ref={input => this.newText = input} defaultValue={this.props.note.note}/>
+                    <textarea ref={input => this.newText = input} defaultValue={note.note}/>
                     <button id="save"> <FaSave /></button>
                     <button id="cancel"> <FaTimesCircle /></button>
-
                 </form>
             </div>
         )
@@ -75,7 +70,6 @@ class Note extends Component {
                 className="note" 
                 style={this.style}  >
                 
-
                 <p> {note.note}</p>
                 <span> 
                     <button id="edit" onClick={this.edit}> <FaPencilAlt /> </button>

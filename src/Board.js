@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import Note from './Note'
 import { FaPlus } from 'react-icons/fa';
+import uuid from "uuid";
+
 
 class Board extends Component {
     state = { 
@@ -8,34 +10,16 @@ class Board extends Component {
     }
 
     updateNote = (newText, i) => {
-       this.setState(prevState => ({
-            notes: prevState.notes.map(
-                note => (note.id !== i) ? note : {...note, note: newText}
-            )
-       }))
-    }
-
-    nextId = () => {
-        this.uniqueId = this.uniqueId || 0
-        return this.uniqueId ++
+       this.setState({notes: this.state.notes.map(note => (note.id !== i) ? note : {...note, note: newText}) })
     }
 
     addNote = (text) => {
-        this.setState(prevState => ({
-            notes : [
-                ...prevState.notes, 
-                {
-                    id: this.nextId(),
-                    note: text
-                }
-            ] 
-       }))
+       const note =  {id: uuid.v4(), note: text}
+       this.setState({notes: [...this.state.notes, note]})
     }
 
     deleteNote = (id) => {
-        this.setState(prevState => ({
-            notes: prevState.notes.filter(note => note.id !== id)
-       }))
+       this.setState({notes: this.state.notes.filter(note => note.id !== id)})
     }
 
     render() { 
@@ -52,7 +36,7 @@ class Board extends Component {
                     )
                 })}
 
-                <button onClick={this.addNote.bind(null, 'New Note')} id="add"> 
+                <button onClick={() => this.addNote('New Note')} id="add"> 
                     <FaPlus />
                 </button>
             </div>
